@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .chat-container {
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .user-message {
+            text-align: right;
+            color: #007bff;
+        }
+        .bot-message {
+            text-align: left;
+            color: #28a745;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .input-container button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Flight Booking Analysis</h1>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <div class="input-container">
+            <input type="text" id="query-input" placeholder="Type your query here..." />
+            <button onclick="sendQuery()">Submit</button>
+        </div>
+    </div>
+    <script>
+        async function sendQuery() {
+            const queryInput = document.getElementById("query-input");
+            const query = queryInput.value.trim();
+            if (!query) return;
+
+            const chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<div class="message user-message">${query}</div>`;
+            queryInput.value = "";
+            try {
+                const response = await fetch('/insights', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query : query })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch the answer");
+                }
+
+                const data = await response.json();
+                chatBox.innerHTML += `<div class="message bot-message">${data['answer_fetched']}</div>`;
+            } catch (error) {
+                chatBox.innerHTML += `<div class="message bot-message">Error: ${error.message}</div>`;
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        document.getElementById("query-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendQuery();
+        }
+    });
+
+    </script>
+</body>
+</html>
