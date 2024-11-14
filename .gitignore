@@ -1,0 +1,17 @@
+#Virtual Environment
+bic_venv
+
+#Environment File
+.env
+
+#Python Notebook
+test.ipynb
+
+#Pycache
+app/__pycache__
+
+#Logs
+*.log
+
+#Cache
+cache/
