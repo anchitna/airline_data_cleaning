@@ -9,6 +9,10 @@ test.ipynb
 
 #Pycache
 app/__pycache__
+app/models/__pycache__ 
+app/services/__pycache__ 
+app/tools/__pycache__ 
+app/utils/__pycache__
 
 #Logs
 *.log
