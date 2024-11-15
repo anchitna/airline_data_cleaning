@@ -2,8 +2,8 @@
 
 Follow these steps to set up the project locally
 
-1. Clone the Repository: git clone https://github.com/your-username/your-repo-name.git
-2. cd your-repo-name
+1. Clone the Repository: (https://github.com/anchitna/airline_data_cleaning.git)
+2. cd airline_data_cleaning
 3. Create a Virtual Environment
 
 It's recommended to use a virtual environment to manage dependencies.

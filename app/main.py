@@ -4,6 +4,7 @@ from app.services.data_cleaning_service import CleanData
 from app.models.chat_model import UserChat
 from pandasai import Agent
 from app.utils.llm_helper import LLM
+from tests.test_services import TestQuestions
 
 import logging
 import pandas as pd
@@ -43,17 +44,22 @@ while retry_count < 5:
         '''
         Performing cleaning on the data.
         '''
-        CleanData.clean_data()
+        # CleanData.clean_data()
+        data_file_path = "app/data/Clean_Booking_Details.csv"
         llm = LLM.get_llm()
-        booking_details = pd.read_csv("app/data/Clean Booking Details.csv")
+        booking_details = pd.read_csv(data_file_path)
         agent = Agent(booking_details, config={"llm": llm, "verbose": True, "enable_cache": False})
         agent.train(docs='''Try to find out the code for each user query and then try to execute it on the dataframe. 
                     Then answer the questions respectively.''')
         agent.train(docs='''Some questions can't be answered directly from the current columns. 
                     For those questions, generate the column according to the question 
                     given and then answer the question''')
+        agent.train(docs='''Try to find out patterns using the data given and analyze the user query 
+                    deeply before answering the question.''')
         logging.info("PandasAI agent created and trained successfully.")
-        retry_count = 5
+        test = TestQuestions(data_path=data_file_path)
+        test.test_queries()
+        break
     except Exception as e:
         logger.error("Retrying, error occured. ", e)
         retry_count += 1
