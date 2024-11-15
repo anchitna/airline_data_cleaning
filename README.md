@@ -26,6 +26,17 @@ venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
+# Environment File
+
+vi .env
+
+Need to set up keys to access the LLM and PandasAI.
+
+```
+OPENAI_API_KEY
+PANDASAI_API_KEY
+```
+
 #  Quick Start
 
 Start the FastAPI application using Uvicorn.
